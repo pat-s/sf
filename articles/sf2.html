@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -78,6 +78,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -101,7 +104,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="sf2_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>2. Reading, Writing and Converting Simple Features</h1>
@@ -132,17 +135,17 @@
 <a href="#using-st_read" class="anchor"></a>Using st_read</h3>
 <p>As an example, we read the North Carolina counties SIDS dataset, which comes shipped with the <code>sf</code> package by:</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)
-<span class="co">## Linking to GEOS 3.5.0, GDAL 2.2.2, PROJ 4.8.0</span>
+<span class="co">## Linking to GEOS 3.8.1, GDAL 3.1.2, PROJ 7.1.0</span>
 <span class="no">fname</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"sf"</span>)
 <span class="no">fname</span>
-<span class="co">## [1] "/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/shape/nc.shp"</span>
+<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXWXM1f/temp_libpath38aa41d79ba6/sf/shape/nc.shp"</span>
 <span class="no">nc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="no">fname</span>)
-<span class="co">## Reading layer `nc' from data source `/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXWXM1f/temp_libpath38aa41d79ba6/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="co">## CRS:            4267</span></pre></body></html></div>
+<span class="co">## geographic CRS: NAD27</span></pre></body></html></div>
 <p>Typical users will use a file name with path for <code>fname</code>, or first set R’s working directory with <code><a href="https://rdrr.io/r/base/getwd.html">setwd()</a></code> and use file name without path.</p>
 <p>We see here that a single argument is used to find both the datasource and the layer. This works when the datasource contains a single layer. In case the number of layers is zero (e.g. a database with no tables), an error message is given. In case there are more layers than one, the first layer is returned, but a message and a warning are given:</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r">&gt; st_read("PG:dbname=postgis")
@@ -180,12 +183,12 @@ Available layers:
 <p>Alternatively, a user can set the global option <code>stringsAsFactors</code>, and this will have the same effect:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">stringsAsFactors</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="no">fname</span>)
-<span class="co">## Reading layer `nc' from data source `/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXWXM1f/temp_libpath38aa41d79ba6/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="co">## CRS:            4267</span></pre></body></html></div>
+<span class="co">## geographic CRS: NAD27</span></pre></body></html></div>
 </div>
 <div id="using-st_write" class="section level3">
 <h3 class="hasAnchor">
@@ -444,10 +447,11 @@ Available layers:
 <span class="co">##  [5] st_as_sfc.factor*             st_as_sfc.list*              </span>
 <span class="co">##  [7] st_as_sfc.map*                st_as_sfc.owin*              </span>
 <span class="co">##  [9] st_as_sfc.pq_geometry*        st_as_sfc.psp*               </span>
-<span class="co">## [11] st_as_sfc.raw*                st_as_sfc.SpatialLines*      </span>
-<span class="co">## [13] st_as_sfc.SpatialMultiPoints* st_as_sfc.SpatialPixels*     </span>
-<span class="co">## [15] st_as_sfc.SpatialPoints*      st_as_sfc.SpatialPolygons*   </span>
-<span class="co">## [17] st_as_sfc.tess*               st_as_sfc.WKB*               </span>
+<span class="co">## [11] st_as_sfc.raw*                st_as_sfc.s2_geography*      </span>
+<span class="co">## [13] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*</span>
+<span class="co">## [15] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     </span>
+<span class="co">## [17] st_as_sfc.SpatialPolygons*    st_as_sfc.tess*              </span>
+<span class="co">## [19] st_as_sfc.wk_wkb*             st_as_sfc.WKB*               </span>
 <span class="co">## see '?methods' for accessing help and source code</span></pre></body></html></div>
 <p>An example would be:</p>
 <div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sp</span>)
@@ -467,7 +471,7 @@ Available layers:
 <span class="co">## [1,]         5         5</span>
 <span class="co">## [2,]         6         9</span>
 <span class="co">## Coordinate Reference System (CRS) arguments: +proj=longlat +datum=WGS84</span>
-<span class="co">## +no_defs +ellps=WGS84 +towgs84=0,0,0</span></pre></body></html></div>
+<span class="co">## +no_defs</span></pre></body></html></div>
 </div>
 </div>
   </div>

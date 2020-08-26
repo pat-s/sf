@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -78,6 +78,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -101,7 +104,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="sf6_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>6. Miscellaneous</h1>
@@ -127,15 +130,15 @@
 <a href="#how-does-sf-deal-with-secondary-geometry-columns" class="anchor"></a>How does <code>sf</code> deal with secondary geometry columns?</h1>
 <p><code>sf</code> objects can have more than one geometry list-column, but always only one geometry column is considered <em>active</em>, and returned by <code>st_geometry</code>. When there are multiple geometry columns, the default <code>print</code> methods reports which one is active:</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)
-<span class="co">## Linking to GEOS 3.5.0, GDAL 2.2.2, PROJ 4.8.0</span>
+<span class="co">## Linking to GEOS 3.8.1, GDAL 3.1.2, PROJ 7.1.0</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/demo.html">demo</a></span>(<span class="no">nc</span>, <span class="kw">ask</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">echo</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="co">## Reading layer `nc.gpkg' from data source `/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/gpkg/nc.gpkg' using driver `GPKG'</span>
+<span class="co">## Reading layer `nc.gpkg' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXWXM1f/temp_libpath38aa41d79ba6/sf/gpkg/nc.gpkg' using driver `GPKG'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="co">## CRS:            4267</span>
+<span class="co">## geographic CRS: NAD27</span>
 <span class="no">nc</span>$<span class="no">geom2</span> <span class="kw">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span>(<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="no">nc</span>))
 <span class="co">## Warning in st_centroid.sfc(st_geometry(nc)): st_centroid does not give correct</span>
 <span class="co">## centroids for longitude/latitude data</span>
@@ -146,7 +149,7 @@
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="co">## CRS:            4267</span>
+<span class="co">## geographic CRS: NAD27</span>
 <span class="co">## First 2 features:</span>
 <span class="co">##    AREA PERIMETER CNTY_ CNTY_ID      NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
 <span class="co">## 1 0.114     1.442  1825    1825      Ashe 37009  37009        5  1091     1</span>
@@ -189,9 +192,8 @@
         <span class="kw">crs</span> <span class="kw">=</span> <span class="fl">4326</span>)
 <span class="no">pole</span> <span class="kw">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">90</span>)), <span class="kw">crs</span> <span class="kw">=</span> <span class="fl">4326</span>)
 <span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(<span class="no">polygon</span>, <span class="no">pole</span>)
-<span class="co">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 <span class="co">## Sparse geometry binary predicate list of length 1, where the predicate was `intersects'</span>
-<span class="co">##  1: (empty)</span></pre></body></html></div>
+<span class="co">##  1: 1</span></pre></body></html></div>
 <p>which gives a wrong result (no intersection).</p>
 </div>
 <div id="st_centroid-does-not-give-correct-centroids-for-longitudelatitude-data" class="section level2">
@@ -212,12 +214,7 @@
 <p>This message indicates that <code>sf</code> assumes a distance value is given in degrees. To avoid this message, pass a value with the right units:</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">pt</span> <span class="kw">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>)), <span class="kw">crs</span> <span class="kw">=</span> <span class="fl">4326</span>)
 <span class="no">buf</span> <span class="kw">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="no">polygon</span>, <span class="fl">1</span>)
-<span class="co">## Warning in st_buffer.sfc(polygon, 1): st_buffer does not correctly buffer</span>
-<span class="co">## longitude/latitude data</span>
-<span class="co">## dist is assumed to be in decimal degrees (arc_degrees).</span>
-<span class="no">buf</span> <span class="kw">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="no">polygon</span>, <span class="kw pkg">units</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/set_units.html">set_units</a></span>(<span class="fl">1</span>, <span class="no">degree</span>))
-<span class="co">## Warning in st_buffer.sfc(polygon, units::set_units(1, degree)): st_buffer does</span>
-<span class="co">## not correctly buffer longitude/latitude data</span></pre></body></html></div>
+<span class="no">buf</span> <span class="kw">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="no">polygon</span>, <span class="kw pkg">units</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/set_units.html">set_units</a></span>(<span class="fl">1</span>, <span class="no">degree</span>))</pre></body></html></div>
 </div>
 </div>
   </div>

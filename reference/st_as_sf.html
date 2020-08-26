@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -119,6 +119,9 @@
     </li>
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
+    </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
     </li>
   </ul>
 </li>
@@ -272,7 +275,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 181025 ymin: 333537 xmax: 181165 ymax: 333611
-#&gt; CRS:            EPSG:28992
+#&gt; projected CRS:  Amersfoort / RD New
 #&gt;   cadmium copper lead zinc  elev       dist   om ffreq soil lime landuse dist.m
 #&gt; 1    11.7     85  299 1022 7.909 0.00135803 13.6     1    1    1      Ah     50
 #&gt; 2     8.6     81  277 1141 6.983 0.01222430 14.0     1    1    1      Ah     30
@@ -329,12 +332,12 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
   <span class='no'>a</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>r</span>)
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>a</span>)
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.5-3, (SVN revision 634)</span>
-#&gt; <span class='message'> GEOS runtime version: 3.5.0-CAPI-1.9.0 </span>
-#&gt; <span class='message'> Linking to sp version: 1.4-1 </span>
+#&gt; <span class='message'> GEOS runtime version: 3.8.1-CAPI-1.13.3 </span>
+#&gt; <span class='message'> Linking to sp version: 1.4-2 </span>
 #&gt; <span class='message'> Polygon checking: TRUE </span></div><div class='output co'>#&gt;          geometry
 #&gt;  MULTIPOLYGON:2  
-#&gt;  epsg:NA     :0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/demo.html'>demo</a></span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>))</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
+#&gt;  epsg:NA     :0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/demo.html'>demo</a></span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown based on Bessel 1841 ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>))</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
 #&gt;  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
 #&gt;  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
 #&gt;  Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  
@@ -380,33 +383,9 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;  LINESTRING   :1  
 #&gt;  epsg:NA      :0  
 #&gt;  +proj=ster...:0  </div><div class='input'><span class='no'>pol.grd</span> <span class='kw'>=</span> <span class='fu'><a href='coerce-methods.html'>as</a></span>(<span class='no'>meuse.grid</span>, <span class='st'>"SpatialPolygonsDataFrame"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='fu'>st_as_sf</span>(<span class='no'>pol.grd</span>))</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
-#&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
-#&gt;  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
-#&gt;  Median :0.0000   Median :1.0000   Median :0.2715   3: 354   3: 989  
-#&gt;  Mean   :0.3986   Mean   :0.6014   Mean   :0.2971                    
-#&gt;  3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.4402                    
-#&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
-#&gt;           geometry   
-#&gt;  POLYGON      :3103  
-#&gt;  epsg:NA      :   0  
-#&gt;  +proj=ster...:   0  
-#&gt;                      
-#&gt;                      
-#&gt;                      </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='fu'>st_as_sf</span>(<span class='fu'><a href='coerce-methods.html'>as</a></span>(<span class='no'>pol.grd</span>, <span class='st'>"SpatialLinesDataFrame"</span>)))</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
-#&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
-#&gt;  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
-#&gt;  Median :0.0000   Median :1.0000   Median :0.2715   3: 354   3: 989  
-#&gt;  Mean   :0.3986   Mean   :0.6014   Mean   :0.2971                    
-#&gt;  3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.4402                    
-#&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
-#&gt;           geometry   
-#&gt;  LINESTRING   :3103  
-#&gt;  epsg:NA      :   0  
-#&gt;  +proj=ster...:   0  
-#&gt;                      
-#&gt;                      
-#&gt;                      </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>spatstat</span>)) {
+<span class='co'># summary(st_as_sf(pol.grd))</span>
+<span class='co'># summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))</span>
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>spatstat</span>)) {
   <span class='no'>g</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>gorillas</span>)
   <span class='co'># select only the points:</span>
   <span class='no'>g</span>[<span class='fu'><a href='st_is.html'>st_is</a></span>(<span class='no'>g</span>, <span class='st'>"POINT"</span>),]
@@ -417,23 +396,24 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt; <span class='message'>  method     from</span>
 #&gt; <span class='message'>  print.boxx cli </span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>spatstat 1.64-1       (nickname: ‘Help you I can, yes!’) </span>
-#&gt; <span class='message'>For an introduction to spatstat, type ‘beginner’ </span></div><div class='output co'>#&gt; Simple feature collection with 647 features and 4 fields
+#&gt; <span class='message'>For an introduction to spatstat, type ‘beginner’ </span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Note: spatstat version 1.64-1 is out of date by more than 3 months; we recommend upgrading to the latest version.</span></div><div class='output co'>#&gt; Simple feature collection with 647 features and 4 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 580797.3 ymin: 675238.7 xmax: 584945.3 ymax: 678313.5
 #&gt; CRS:            NA
 #&gt; First 10 features:
 #&gt;    label group season       date                      geom
-#&gt; 1  point major    dry 2006-01-06 POINT (582518.4 676886.2)
-#&gt; 2  point major    dry 2006-01-10   POINT (581823 677422.7)
-#&gt; 3  point major    dry 2006-01-15   POINT (582131 676937.9)
-#&gt; 4  point major    dry 2006-01-24   POINT (582111.9 677420)
-#&gt; 5  point minor    dry 2006-01-27 POINT (582585.1 677509.7)
-#&gt; 6  point major    dry 2006-01-28 POINT (582302.3 677521.6)
-#&gt; 7  point major    dry 2006-02-01 POINT (583167.2 676730.5)
-#&gt; 8  point major    dry 2006-02-03 POINT (583584.5 677207.1)
-#&gt; 9  point major    dry 2006-02-13 POINT (583117.8 676850.3)
-#&gt; 10 point major    dry 2006-02-15 POINT (582902.8 676724.1)</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>spatstat</span>)) {
+#&gt; 2  point major    dry 2006-01-06 POINT (582518.4 676886.2)
+#&gt; 3  point major    dry 2006-01-10   POINT (581823 677422.7)
+#&gt; 4  point major    dry 2006-01-15   POINT (582131 676937.9)
+#&gt; 5  point major    dry 2006-01-24   POINT (582111.9 677420)
+#&gt; 6  point minor    dry 2006-01-27 POINT (582585.1 677509.7)
+#&gt; 7  point major    dry 2006-01-28 POINT (582302.3 677521.6)
+#&gt; 8  point major    dry 2006-02-01 POINT (583167.2 676730.5)
+#&gt; 9  point major    dry 2006-02-03 POINT (583584.5 677207.1)
+#&gt; 10 point major    dry 2006-02-13 POINT (583117.8 676850.3)
+#&gt; 11 point major    dry 2006-02-15 POINT (582902.8 676724.1)</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>spatstat</span>)) {
  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>chicago</span>)
  <span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>)[<span class='st'>"label"</span>])
  <span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>)[-<span class='fl'>1</span>,<span class='st'>"label"</span>])

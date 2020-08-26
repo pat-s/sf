@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -125,6 +125,9 @@
     </li>
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
+    </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
     </li>
   </ul>
 </li>
@@ -202,14 +205,14 @@
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 170 ymin: 50 xmax: 190 ymax: 50
-#&gt; CRS:            EPSG:4326</div><div class='output co'>#&gt; <span class='message'>POINT (190 50)</span></div><div class='output co'>#&gt; <span class='message'>POINT (170 50)</span></div><div class='input'>
+#&gt; geographic CRS: WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (190 50)</span></div><div class='output co'>#&gt; <span class='message'>POINT (170 50)</span></div><div class='input'>
 <span class='co'>## sf</span>
 <span class='no'>d</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>geometry</span> <span class='kw'>=</span> <span class='no'>sfc</span>))
 <span class='fu'>st_shift_longitude</span>(<span class='no'>d</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 170 ymin: 50 xmax: 190 ymax: 50
-#&gt; CRS:            EPSG:4326
+#&gt; geographic CRS: WGS 84
 #&gt;   id       geometry
 #&gt; 1  1 POINT (190 50)
 #&gt; 2  2 POINT (170 50)</div></pre>

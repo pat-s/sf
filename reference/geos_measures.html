@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -147,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compute geometric measurements</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom.R'><code>R/geom.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom-measures.R'><code>R/geom-measures.R</code></a></small>
     <div class="hidden name"><code>geos_measures.Rd</code></div>
     </div>
 
@@ -157,7 +160,10 @@
 
     <pre class="usage"><span class='fu'>st_area</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>st_length</span>(<span class='no'>x</span>)
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_area</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='fu'>st_length</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='fu'>st_distance</span>(
   <span class='no'>x</span>,
@@ -226,7 +232,7 @@
 <span class='no'>b2</span> <span class='kw'>=</span> <span class='no'>b0</span> + <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>0.2</span>, <span class='fl'>2</span>)
 <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>b0</span>, <span class='no'>b1</span>, <span class='no'>b2</span>)
 <span class='fu'>st_area</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 4 4 4</div><div class='input'><span class='no'>line</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>30</span>,<span class='fl'>30</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>40</span>,<span class='fl'>40</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
-<span class='fu'>st_length</span>(<span class='no'>line</span>)</div><div class='output co'>#&gt; 1434649 [m]</div><div class='input'>
+<span class='fu'>st_length</span>(<span class='no'>line</span>)</div><div class='output co'>#&gt; 1435335 [m]</div><div class='input'>
 <span class='no'>outer</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>hole1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>hole2</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>5</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
